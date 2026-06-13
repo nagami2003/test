@@ -26,6 +26,8 @@ const CONFIG = {
     INVOICES: '請求書管理',
     SALES: '売上管理',
     SETTINGS: '設定',
+    COMPLIANCE: 'コンプライアンス届出管理',
+    ANALYTICS: '経営分析',
   },
 
   // ---------- Drive フォルダ名 ----------

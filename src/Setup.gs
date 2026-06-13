@@ -30,6 +30,7 @@ function createFolderStructure() {
   settingsSheet.getRange('A5:B5').setValues([['InvoicesFolderID', getOrCreateFolder_(root, CONFIG.FOLDERS.INVOICES).getId()]]);
   settingsSheet.getRange('A6:B6').setValues([['TemplatesFolderID', getOrCreateFolder_(root, CONFIG.FOLDERS.TEMPLATES).getId()]]);
   settingsSheet.getRange('A7:B7').setValues([['ReportsFolderID', getOrCreateFolder_(root, CONFIG.FOLDERS.REPORTS).getId()]]);
+  settingsSheet.getRange('A8:B8').setValues([['ContractsFolderID', getOrCreateFolder_(root, CONFIG.FOLDERS.CONTRACTS).getId()]]);
 
   styleSettingsSheet_(settingsSheet);
   ui.alert('✅ Driveフォルダ構造の作成が完了しました。\n\nフォルダ: ' + CONFIG.FOLDERS.ROOT);

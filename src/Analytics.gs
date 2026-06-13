@@ -1,9 +1,6 @@
 // ===== 経営分析 =====
 // 公開関数: buildAnalyticsSheet, insertCharts, createMonthlyReportDoc, refreshAnalytics
 
-/** 経営分析シート名（CONFIG.SHEETS には未登録） */
-const ANALYTICS_SHEET_NAME = '経営分析';
-
 // ============================================================
 // 1. buildAnalyticsSheet — KPI・集計シートの新規作成/再構築
 // ============================================================
@@ -12,9 +9,9 @@ function buildAnalyticsSheet() {
   const kpi = collectKpiData_(ss);
 
   // シート取得または作成
-  let sheet = ss.getSheetByName(ANALYTICS_SHEET_NAME);
+  let sheet = ss.getSheetByName(CONFIG.SHEETS.ANALYTICS);
   if (!sheet) {
-    sheet = ss.insertSheet(ANALYTICS_SHEET_NAME);
+    sheet = ss.insertSheet(CONFIG.SHEETS.ANALYTICS);
   } else {
     sheet.clearContents();
     sheet.clearFormats();
@@ -79,7 +76,7 @@ function buildAnalyticsSheet() {
 // ============================================================
 function insertCharts() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(ANALYTICS_SHEET_NAME);
+  let sheet = ss.getSheetByName(CONFIG.SHEETS.ANALYTICS);
   if (!sheet) {
     sheet = buildAnalyticsSheet();
   }
@@ -338,7 +335,7 @@ function refreshAnalytics() {
   insertCharts();
   SpreadsheetApp.getUi().alert(
     '✅ 経営分析シートを更新しました。\n\n' +
-    'シート「' + ANALYTICS_SHEET_NAME + '」にKPIとグラフを反映しました。'
+    'シート「' + CONFIG.SHEETS.ANALYTICS + '」にKPIとグラフを反映しました。'
   );
 }
 
@@ -748,7 +745,7 @@ Config.gs の SHEETS オブジェクトに以下を追加すると
 
   ANALYTICS: '経営分析',
 
-追加後は Analytics.gs のローカル定数 ANALYTICS_SHEET_NAME を
+追加後は Analytics.gs のローカル定数 CONFIG.SHEETS.ANALYTICS を
 CONFIG.SHEETS.ANALYTICS に置き換えてください。
 
 ==========================================================================

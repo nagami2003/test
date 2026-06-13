@@ -9,10 +9,6 @@
 //
 // 参考URL: https://www.moj.go.jp/isa/applications/status/tokutei_index.html
 
-// ---------- ローカル定数 ----------
-// Config.gs の SHEETS への追加を提案: COMPLIANCE: 'コンプライアンス届出管理'
-var COMPLIANCE_SHEET_NAME = 'コンプライアンス届出管理';
-
 // 届出管理シートの列インデックス（1始まり）
 var COMPLIANCE_COL = {
   ID:         1,   // 届出ID
@@ -202,7 +198,7 @@ function createQuarterlyReportChecklistDoc() {
 function initComplianceSheet_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  var sheet = ss.getSheetByName(COMPLIANCE_SHEET_NAME);
+  var sheet = ss.getSheetByName(CONFIG.SHEETS.COMPLIANCE);
   if (sheet) {
     // 既存シートがある場合は上書き確認せず再初期化（ヘッダのみ）
     var lastRow = sheet.getLastRow();
@@ -216,7 +212,7 @@ function initComplianceSheet_() {
     sheet.clearContents();
     sheet.clearFormats();
   } else {
-    sheet = ss.insertSheet(COMPLIANCE_SHEET_NAME);
+    sheet = ss.insertSheet(CONFIG.SHEETS.COMPLIANCE);
   }
 
   createNotificationListSheet_(sheet);
@@ -290,6 +286,12 @@ function setComplianceConditionalFormats_(sheet) {
 }
 
 
+// カスタムメニューから呼び出すための公開ラッパー
+function setupComplianceSheet() {
+  initComplianceSheet_();
+  SpreadsheetApp.getUi().alert('✅ コンプライアンス届出管理シートを初期化しました。');
+}
+
 // ============================================================
 // 3. generateComplianceSchedule()
 //    当年度の四半期定期届出4回分を届出管理シートに自動投入
@@ -303,7 +305,7 @@ function generateComplianceSchedule() {
   var year = now.getFullYear();
 
   // 届出管理シートを取得または初期化
-  var sheet = ss.getSheetByName(COMPLIANCE_SHEET_NAME);
+  var sheet = ss.getSheetByName(CONFIG.SHEETS.COMPLIANCE);
   if (!sheet) {
     sheet = initComplianceSheet_();
   }
@@ -379,7 +381,7 @@ function generateComplianceSchedule() {
 function checkComplianceDeadlines() {
   var ss    = SpreadsheetApp.getActiveSpreadsheet();
   var ui    = SpreadsheetApp.getUi();
-  var sheet = ss.getSheetByName(COMPLIANCE_SHEET_NAME);
+  var sheet = ss.getSheetByName(CONFIG.SHEETS.COMPLIANCE);
 
   if (!sheet || sheet.getLastRow() <= 1) {
     ui.alert(
@@ -891,5 +893,5 @@ function getLastDayOfMonth_(year, month) {
 //   COMPLIANCE: 'コンプライアンス届出管理',
 //
 // 上記を Config.gs の SHEETS ブロックへ追加すると、
-// 本ファイルの COMPLIANCE_SHEET_NAME 変数を
+// 本ファイルの CONFIG.SHEETS.COMPLIANCE 変数を
 // CONFIG.SHEETS.COMPLIANCE に置き換えられます。

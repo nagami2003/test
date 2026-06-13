@@ -26,15 +26,25 @@
 
 ### 2. Apps Script にコードを貼り付け
 
-**方法A: clasp（推奨）**
+**方法A: clasp（推奨 / ほぼ全自動）**
 
 ```bash
-npm install -g @google/clasp
-clasp login
-clasp create --type sheets --title "登録支援機関管理システム"
-# .clasp.json の scriptId が自動設定されます
-clasp push
+npm install            # clasp をローカルに導入
+npm run login          # Googleアカウントでログイン（ブラウザが開きます）
+npm run create         # スプレッドシート＋Apps Scriptを新規作成
+npm run deploy         # 全コードをアップロード
+npm run open           # 作成されたスプレッドシートを開く
 ```
+
+`npm run create` 実行時に `.clasp.json` の `scriptId` が自動で書き換わります。
+以降コードを変更したら `npm run deploy` だけで反映されます。
+
+**方法A-2: GitHub Actions で自動デプロイ**
+
+`main` ブランチの `src/` を変更すると自動デプロイされます。
+GitHub の Settings → Secrets に次を登録してください:
+- `CLASPRC_JSON`: ローカルで `npm run login` 後に生成される `~/.clasprc.json` の中身
+- `SCRIPT_ID`: `npm run create` で発行されたスクリプトID
 
 **方法B: 手動コピー**
 
@@ -64,6 +74,12 @@ COMPANY: {
 1. **初期設定 → Driveフォルダ構造を作成**
 2. **初期設定 → シートを初期化**
 3. **通知・自動化 → 定期通知トリガーを設定**
+
+### 5.（任意）動作確認：サンプルデータ
+
+仕組みをすぐ確認したい場合、Apps Script エディタで `loadSampleData` を実行すると
+企業2社・外国人3名・面談・請求書のサンプルが入り、ダッシュボードにアラートが表示されます。
+本番運用前に `clearSampleData` で削除できます。
 
 ---
 
@@ -102,5 +118,13 @@ src/
 ├── SupportPlans.gs   # 支援計画管理
 ├── Interviews.gs     # 定期面談管理
 ├── Invoices.gs       # 請求書管理
-└── Notifications.gs  # 自動通知・トリガー
+├── Notifications.gs  # 自動通知・トリガー
+└── SampleData.gs     # 動作確認用サンプルデータ（任意）
 ```
+
+## 必要な権限（OAuthスコープ）
+
+初回実行時に Google から権限承認を求められます（`appsscript.json` で定義）:
+スプレッドシート / Drive / Gmail送信 / カレンダー / ドキュメント
+
+すべて自社の Google Workspace アカウント内で完結し、外部送信はありません。

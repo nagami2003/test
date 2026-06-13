@@ -105,8 +105,11 @@ function addSupportPlanRow_(workerId, name, companyName) {
   const today = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy/MM/dd');
   const baseData = [planId, workerId, name, companyName, today, ''];
   const supportStatuses = CONFIG.SUPPORT_TYPES.map(() => '未実施');
-  const row = [...baseData, ...supportStatuses, '=COUNTIF(G'+lastRow+1+':R'+lastRow+1+',"実施済")/12', ''];
-  sheet.getRange(lastRow + 1, 1, 1, row.length).setValues([row]);
+  const targetRow = lastRow + 1;
+  const rate = `=COUNTIF(G${targetRow}:R${targetRow},"実施済")/12`;
+  const row = [...baseData, ...supportStatuses, rate, ''];
+  sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
+  sheet.getRange(targetRow, baseData.length + CONFIG.SUPPORT_TYPES.length + 1).setNumberFormat('0%');
 }
 
 function scheduleQuarterlyInterviews_(workerId, name, startDateStr) {

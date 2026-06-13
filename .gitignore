@@ -1,0 +1,14 @@
+# clasp 認証情報（絶対にコミットしないこと）
+.clasprc.json
+~/.clasprc.json
+
+# 依存
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ログ
+*.log
+npm-debug.log*
